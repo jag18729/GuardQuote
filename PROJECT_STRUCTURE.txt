@@ -1,0 +1,132 @@
+GuardQuote Project Structure
+============================
+
+Root Level:
+├── guardquote-backend/               ← Node.js/NestJS API Gateway
+│   ├── src/
+│   │   ├── main.ts                   ← Application entry point
+│   │   ├── app.module.ts             ← Root module
+│   │   ├── auth/                     ← Authentication Module
+│   │   │   ├── auth.module.ts
+│   │   │   ├── auth.service.ts       ← Auth business logic
+│   │   │   ├── auth.controller.ts    ← /auth endpoints
+│   │   │   ├── jwt.strategy.ts       ← JWT validation
+│   │   │   └── dto/
+│   │   │       ├── register.dto.ts
+│   │   │       └── login.dto.ts
+│   │   ├── users/                    ← Users Module
+│   │   │   ├── users.module.ts
+│   │   │   ├── users.service.ts
+│   │   │   └── users.controller.ts
+│   │   ├── quotes/                   ← Quotes Module
+│   │   │   ├── quotes.module.ts
+│   │   │   ├── quotes.service.ts
+│   │   │   ├── quotes.controller.ts
+│   │   │   └── dto/
+│   │   │       ├── create-quote.dto.ts
+│   │   │       └── update-quote.dto.ts
+│   │   └── database/                 ← Database Module
+│   │       ├── database.module.ts    ← Knex setup
+│   │       ├── database.service.ts
+│   │       └── migrations/
+│   │           ├── 001_create_users_table.ts
+│   │           └── 002_create_quotes_table.ts
+│   ├── node_modules/                 ← Dependencies
+│   ├── .env                          ← Database & JWT config
+│   ├── tsconfig.json                 ← TypeScript config
+│   └── package.json                  ← Backend dependencies
+│
+├── guardquote-webapp/                ← React Frontend
+│   ├── src/
+│   │   ├── main.tsx                  ← App entry point
+│   │   ├── App.tsx                   ← Root component
+│   │   ├── services/
+│   │   │   └── apiClient.ts          ← Fully typed API client ✓
+│   │   ├── types/
+│   │   │   ├── User.ts               ← User type definitions ✓
+│   │   │   └── Quote.ts              ← Quote type definitions ✓
+│   │   ├── components/               ← UI components
+│   │   │   ├── Navbar.tsx
+│   │   │   ├── Footer.tsx
+│   │   │   ├── Button.tsx
+│   │   │   ├── Loading.tsx
+│   │   │   └── AuthGuard.tsx
+│   │   ├── pages/                    ← Page components
+│   │   │   ├── Landing.tsx
+│   │   │   ├── Dashboard.tsx
+│   │   │   ├── IndividualQuote.tsx
+│   │   │   ├── BusinessQuote.tsx
+│   │   │   └── Report.tsx
+│   │   ├── context/
+│   │   │   └── AuthContext.tsx       ← Auth state management
+│   │   ├── hooks/
+│   │   │   └── useAuth.ts
+│   │   ├── router/
+│   │   │   └── index.tsx
+│   │   ├── layouts/
+│   │   │   └── MainLayout.tsx
+│   │   └── utils/
+│   │       └── validators.ts
+│   ├── node_modules/                 ← Dependencies
+│   ├── .env.local                    ← API URL config
+│   ├── index.html
+│   ├── vite.config.ts
+│   ├── tsconfig.json
+│   └── package.json
+
+Root Files:
+├── .git/                             ← Version control (on rafael branch)
+├── .gitignore                        ← Git ignore rules
+├── IMPLEMENTATION_PLAN.txt           ← 7-phase development roadmap
+├── PROJECT_STRUCTURE.txt             ← This file
+└── README.md
+
+API Endpoints (Backend runs on :3000):
+====================================
+
+POST   /auth/register                 Register new user
+POST   /auth/login                    Login, get JWT token
+
+GET    /users                         Get all users (protected)
+
+GET    /quotes                        Get my quotes (protected)
+POST   /quotes                        Create quote (protected)
+GET    /quotes/:id                    Get quote by ID (protected)
+PATCH  /quotes/:id                    Update quote (protected)
+DELETE /quotes/:id                    Delete quote (protected)
+
+Frontend (runs on :5174):
+=======================
+
+Uses apiClient.ts for all API communication
+Fully typed with User and Quote interfaces
+Ready for component implementation
+
+Database:
+=========
+
+PostgreSQL running on localhost:5432
+Database: guardquote
+User: guardquote
+Password: guardquote
+
+Tables (created via migrations):
+- users (with id, email, password, first_name, last_name, etc)
+- quotes (with id, user_id, quote_type, status, estimated_amount, etc)
+
+Current Status:
+===============
+
+✓ Backend structure complete
+✓ API endpoints implemented
+✓ Database schema defined
+✓ Frontend API client ready
+✓ Type definitions in place
+✓ Both at root level (correct structure)
+
+Ready for Phase 1 Setup:
+1. Install PostgreSQL
+2. Create database and user
+3. Run migrations
+4. Start backend (npm run dev)
+5. Start frontend (npm run dev)
