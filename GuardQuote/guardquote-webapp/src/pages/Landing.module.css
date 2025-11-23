@@ -1,0 +1,123 @@
+/* Base layout */
+.wrapper {
+  height: 100vh;
+  width: 100%;
+  background: radial-gradient(circle at center, #1c1837 0%, #0d0a20 100%);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Animated tech grid overlay */
+.gridOverlay {
+  position: absolute;
+  inset: 0;
+  width: 140%;
+  height: 140%;
+  background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
+  opacity: 0.06;
+  transform: translate(-20%, -20%);
+  animation: floatGrid 18s ease-in-out infinite alternate;
+  z-index: 1;
+}
+
+@keyframes floatGrid {
+  0% { transform: translate(-20%, -20%) scale(1.1); }
+  100% { transform: translate(0%, 0%) scale(1); }
+}
+
+/* Foreground content container */
+.content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  padding: 0 2rem;
+  color: #fff;
+}
+
+/* Title styling with gradient and glow */
+.title {
+  font-size: 4.25rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(90deg, #552583, #FDB927 70%);
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: glow 4s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 12px rgba(253, 185, 39, 0.25); }
+  to { text-shadow: 0 0 24px rgba(85, 37, 131, 0.45); }
+}
+
+/* Subtitle text */
+.subtitle {
+  font-size: 1.15rem;
+  opacity: 0.9;
+  margin-top: 0.5rem;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Interactive cards */
+.cardContainer {
+  margin-top: 3rem;
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(10px);
+  padding: 1.7rem;
+  border-radius: 0.8rem;
+  width: 280px;
+  text-align: left;
+  transition: 0.3s ease;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-6px) scale(1.03);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(253, 185, 39, 0.5);
+  box-shadow: 0 6px 22px rgba(253, 185, 39, 0.3);
+}
+
+.card h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.6rem;
+  color: #e5dffc;
+}
+
+.card p {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  margin-bottom: 1.2rem;
+}
+
+/* Call to action button */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.4rem;
+  background: linear-gradient(90deg, #552583, #FDB927);
+  background-size: 200%;
+  background-position: 0%;
+  color: white;
+  font-weight: 600;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-position 0.25s, box-shadow 0.25s;
+}
+
+.btn:hover {
+  background-position: 100%;
+  box-shadow: 0px 0px 15px rgba(253, 185, 39, 0.45);
+}
