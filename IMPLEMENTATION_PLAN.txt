@@ -43,7 +43,7 @@ DIRECTORY STRUCTURE:
 ====================
 
 GuardQuote/
-├── guardquote-webapp/              # Frontend (React)
+├── frontend/              # Frontend (React)
 │   ├── src/
 │   │   ├── components/             # UI components
 │   │   ├── pages/                  # Page components
@@ -55,7 +55,7 @@ GuardQuote/
 │   │   └── router/
 │   └── .env.local                  # ✓ READY
 │
-├── guardquote-backend/             # Backend (NestJS)
+├── backend/             # Backend (NestJS)
 │   ├── src/
 │   │   ├── main.ts                 # ✓ CREATED
 │   │   ├── app.module.ts           # ✓ CREATED
@@ -282,15 +282,15 @@ Setup Database:
   GRANT ALL PRIVILEGES ON DATABASE guardquote TO guardquote;
 
 Run Migrations:
-  cd guardquote-backend
+  cd backend
   npx knex migrate:latest
 
 Start Backend:
-  cd guardquote-backend
+  cd backend
   npm run dev
 
 Start Frontend (new terminal):
-  cd guardquote-webapp
+  cd frontend
   npm run dev
 
 Access Application:

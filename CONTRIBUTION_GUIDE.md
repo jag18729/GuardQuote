@@ -40,8 +40,8 @@ Git Remotes:
 ### Project Structure (Root Level)
 ```
 GuardQuote/
-├── guardquote-backend/     (NestJS API on :3000)
-├── guardquote-webapp/      (React Frontend on :5174)
+├── backend/     (NestJS API on :3000)
+├── frontend/      (React Frontend on :5174)
 └── Documentation files
 ```
 
@@ -165,8 +165,8 @@ git clone https://github.com/ibernal1815/GuardQuote.git
 cd GuardQuote
 
 # 2. Install dependencies
-cd guardquote-backend && npm install
-cd ../guardquote-webapp && npm install && cd ..
+cd backend && npm install
+cd ../frontend && npm install && cd ..
 
 # 3. Setup PostgreSQL
 psql postgres << SQL
@@ -176,14 +176,14 @@ GRANT ALL PRIVILEGES ON DATABASE guardquote TO guardquote;
 SQL
 
 # 4. Run migrations
-cd guardquote-backend
+cd backend
 npx knex migrate:latest
 
 # 5. Start backend (Terminal 1)
 npm run dev
 
 # 6. Start frontend (Terminal 2)
-cd guardquote-webapp
+cd frontend
 npm run dev
 ```
 
