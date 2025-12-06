@@ -480,3 +480,258 @@ app.get('/check', async (c) => {
 ---
 
 **Quick Link**: Back to HONO_MIGRATION_GUIDE.md
+
+---
+
+## Zod Validation (Input Validation)
+
+Zod is a schema validation library perfect for Hono API validation.
+
+### Basic Zod Schema
+```typescript
+import { z } from 'zod'
+
+// Define schema for request body
+const RegisterSchema = z.object({
+  email: z.string().email('Invalid email'),
+  password: z.string().min(8, 'Password min 8 chars'),
+  first_name: z.string().min(1),
+  last_name: z.string().min(1),
+  user_type: z.enum(['individual', 'business']).optional(),
+})
+
+type RegisterInput = z.infer<typeof RegisterSchema>
+```
+
+### Using Zod in Hono Routes
+```typescript
+app.post('/auth/register', async (c) => {
+  try {
+    const body = await c.req.json()
+    
+    // Validate with Zod
+    const data = RegisterSchema.parse(body)
+    
+    // Now 'data' is type-safe and validated
+    const result = await registerUser(data)
+    return c.json(result, 201)
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      throw new HTTPException(400, {
+        message: 'Validation failed',
+        details: error.errors
+      })
+    }
+    throw error
+  }
+})
+```
+
+### Zod Validation Helper
+```typescript
+function createValidationMiddleware<T>(schema: z.ZodSchema<T>) {
+  return async (c: Context, next: Next) => {
+    try {
+      const body = await c.req.json()
+      const data = schema.parse(body)
+      c.set('validatedBody', data)
+      await next()
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        throw new HTTPException(400, { message: 'Invalid request' })
+      }
+      throw error
+    }
+  }
+}
+```
+
+### Common Zod Patterns
+```typescript
+import { z } from 'zod'
+
+// String validation
+const email = z.string().email()
+const password = z.string().min(8).max(128)
+const username = z.string().regex(/^[a-zA-Z0-9_]+$/)
+
+// Number validation
+const age = z.number().min(18).max(150)
+const price = z.number().positive().multipleOf(0.01)
+
+// Enum validation
+const status = z.enum(['pending', 'approved', 'rejected'])
+
+// Optional fields
+const company = z.string().optional()
+const phone = z.string().nullable()
+
+// Nested objects
+const address = z.object({
+  street: z.string(),
+  city: z.string(),
+  zipcode: z.string(),
+})
+
+// Arrays
+const tags = z.array(z.string()).min(1)
+const quotes = z.array(z.object({ id: z.string() }))
+
+// Union types
+const notification = z.union([
+  z.object({ type: z.literal('email'), email: z.string() }),
+  z.object({ type: z.literal('sms'), phone: z.string() }),
+])
+```
+
+---
+
+## API Gateway Pattern (Future Implementation)
+
+Your teammate will implement an API Gateway later. Here's how Hono integrates with it:
+
+### API Gateway Architecture
+```
+Client
+  ↓
+API Gateway (Future - Kong, API7, etc.)
+  ↓ Routes requests
+  ├→ /auth → Auth Service (Hono)
+  ├→ /users → User Service (Hono)
+  ├→ /quotes → Quote Service (Hono)
+  └→ /ml → ML Service (Python FastAPI)
+  ↓
+Backend Services
+```
+
+### Preparing Hono for API Gateway
+
+**1. Version Your API**
+```typescript
+// routes/auth.ts
+const auth = new Hono().basePath('/v1')
+
+auth.post('/auth/register', async (c) => { ... })
+// Accessible at: /v1/auth/register
+```
+
+**2. Add Standard Headers**
+```typescript
+app.use(async (c, next) => {
+  await next()
+  c.header('X-API-Version', '1.0')
+  c.header('X-Service', 'guardian-backend')
+})
+```
+
+**3. Structure for Multiple Services**
+```typescript
+// index.ts
+const v1 = new Hono()
+
+// Mount all routes under v1
+v1.route('/auth', authRoutes)
+v1.route('/users', usersRoutes)
+v1.route('/quotes', quotesRoutes)
+
+app.route('/api/v1', v1)
+// Routes accessible at: /api/v1/auth/register, etc.
+```
+
+**4. Health Check for Gateway**
+```typescript
+app.get('/health', (c) => {
+  return c.json({
+    status: 'healthy',
+    service: 'backend',
+    version: '1.0.0',
+    uptime: process.uptime(),
+  })
+})
+```
+
+**5. Request ID Tracking (for logging through gateway)**
+```typescript
+import { crypto } from 'node:crypto'
+
+app.use(async (c, next) => {
+  const requestId = c.req.header('X-Request-ID') || crypto.randomUUID()
+  c.set('requestId', requestId)
+  c.header('X-Request-ID', requestId)
+  await next()
+})
+```
+
+### Notes for API Gateway Integration
+- Hono can run behind any gateway (Kong, API7, Traefik, etc.)
+- Keep services stateless (good for scaling)
+- Use consistent error responses
+- Include version in API paths
+- Implement health checks
+- Use request IDs for tracing
+
+---
+
+## Zod + Hono + API Gateway Example
+
+Complete example combining all three:
+
+```typescript
+import { Hono } from 'hono'
+import { z } from 'zod'
+import { HTTPException } from 'hono/http-exception'
+
+// Schema
+const CreateQuoteSchema = z.object({
+  quote_type: z.enum(['individual', 'business']),
+  coverage_type: z.string().min(1),
+  coverage_level: z.string().min(1),
+  estimated_amount: z.number().positive(),
+  description: z.string().optional(),
+})
+
+type CreateQuoteInput = z.infer<typeof CreateQuoteSchema>
+
+// Validation helper
+function validateBody<T>(schema: z.ZodSchema<T>) {
+  return async (c: Context, next: Next) => {
+    try {
+      const body = await c.req.json()
+      const data = schema.parse(body)
+      c.set('validatedBody', data)
+      await next()
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        throw new HTTPException(400, {
+          message: 'Invalid request body',
+          errors: error.errors,
+        })
+      }
+      throw error
+    }
+  }
+}
+
+// Route
+const quotes = new Hono()
+
+quotes.post(
+  '/',
+  authMiddleware,
+  validateBody(CreateQuoteSchema),
+  async (c) => {
+    const user = getUser(c)
+    const data = c.get('validatedBody') as CreateQuoteInput
+    
+    // data is now type-safe and validated
+    const quote = await quoteService.createQuote(user.id, data)
+    return c.json(quote, 201)
+  }
+)
+
+export default quotes
+```
+
+---
+
+**Note**: Zod integration and API Gateway patterns are ready for future implementation!
