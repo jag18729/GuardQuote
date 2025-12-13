@@ -10,6 +10,8 @@ Welcome to GuardQuote documentation. This directory contains all guides, archite
 - **[GETTING_STARTED.md](./GETTING_STARTED.md)** - Set up and run GuardQuote locally
 
 ### Implementation Guides (How-To)
+- **[guides/BUN_1_3_RECOMMENDATIONS.md](./guides/BUN_1_3_RECOMMENDATIONS.md)** - Bun 1.3 features, migration path, and recommendations (NEW!)
+
 - **[guides/HONO_MIGRATION_GUIDE.md](./guides/HONO_MIGRATION_GUIDE.md)** - Migrate backend from NestJS to Hono (Phase 1)
 - **[guides/BUNCHMARK.md](./guides/BUNCHMARK.md)** - Install and use Bun as runtime (Phase 2)
 - **[guides/BUN_ML_SCALING.md](./guides/BUN_ML_SCALING.md)** - Scale with ML engine and generated quotes
@@ -72,6 +74,8 @@ docs/
 ├── GETTING_STARTED.md                     (Quick start)
 ├── .continue                              (Next session guide)
 │
+│   ├── BUN_1_3_RECOMMENDATIONS.md       Bun 1.3 features & migration path
+
 ├── guides/                                (How-to & Implementation)
 │   ├── HONO_MIGRATION_GUIDE.md            Phase 1: Backend rewrite
 │   ├── BUNCHMARK.md                       Phase 2: Bun setup

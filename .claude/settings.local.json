@@ -8,7 +8,15 @@
       "Bash(tree:*)",
       "Bash(cd:*)",
       "Bash(pkill -f \"cp -r GuardQuote-main/GuardQuote-main/frontend\")",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nMerge Isiah''s latest changes: Add complete frontend, backend, and ML engine\n\nThis commit integrates Isiah''s comprehensive updates including:\n\nFrontend:\n- Complete React 19 + Vite application with TypeScript\n- React Router v7 with full routing setup\n- Component structure (pages, layouts, components, hooks)\n- Form handling with react-hook-form\n- Authentication context and API client\n- Bun package manager support with optimizations\n- ESLint configuration for code quality\n\nBackend:\n- NestJS API with authentication module\n- JWT strategy implementation\n- User and Quote management controllers\n- Database module with migrations\n- DTOs for type safety\n\nML Engine:\n- Python-based machine learning pipeline\n- Requirements and setup documentation\n\nProject Structure:\n- Comprehensive documentation in /docs\n- Architecture guides for Hono migration\n- Bun scaling and optimization guides\n- Clean project structure with modular organization\n\nCleanup:\n- Removed duplicate zip files (GuardQuote.zip, combinepdf.zip)\n- Removed old GuardQuote/guardquote-webapp directory\n- Updated .gitignore\n- Consolidated project structure\n\nAll team members can now work from the latest unified codebase.\n\n🤖 Generated with Claude Code\n\nCo-Authored-By: Isiah <isiah@guardquote.dev>\nEOF\n)\")",
+      "Bash(git push origin main)",
+      "Bash(du:*)",
+      "WebFetch(domain:blog.logrocket.com)",
+      "Bash(git ls-tree -r HEAD frontend)",
+      "Bash(git checkout:*)",
+      "Bash(npm run install:all:*)",
+      "Bash(npm run:*)"
     ],
     "deny": [],
     "ask": []
